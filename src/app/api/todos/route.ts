@@ -3,6 +3,7 @@ import { client } from '../../../lib/hygraph';
 import { gql } from 'graphql-request';
 import { Todo } from '../../../../types';
 
+// Mutation to create a Todo
 const CREATE_TODO = gql`
   mutation CreateTodo($title: String!, $description: String!) {
     createTodo(data: { title: $title, description: $description, completed: false }) {
@@ -14,6 +15,16 @@ const CREATE_TODO = gql`
   }
 `;
 
+// Mutation to publish a Todo
+const PUBLISH_TODO = gql`
+  mutation PublishTodo($id: ID!) {
+    publishTodo(where: { id: $id }) {
+      id
+    }
+  }
+`;
+
+// Mutation to update a Todo
 const UPDATE_TODO = gql`
   mutation UpdateTodo($id: ID!, $completed: Boolean!) {
     updateTodo(where: { id: $id }, data: { completed: $completed }) {
@@ -25,6 +36,7 @@ const UPDATE_TODO = gql`
   }
 `;
 
+// Mutation to delete a Todo
 const DELETE_TODO = gql`
   mutation DeleteTodo($id: ID!) {
     deleteTodo(where: { id: $id }) {
@@ -33,20 +45,37 @@ const DELETE_TODO = gql`
   }
 `;
 
+// Handle creating a Todo
 export async function POST(req: NextRequest) {
   const { title, description } = await req.json();
-  const data = await client.request<{ createTodo: Todo }>(CREATE_TODO, { title, description });
-  return NextResponse.json(data.createTodo);
+
+  // Create Todo in draft
+  const createData = await client.request<{ createTodo: Todo }>(CREATE_TODO, { title, description });
+  const todo = createData.createTodo;
+
+  // Publish the new Todo
+  await client.request(PUBLISH_TODO, { id: todo.id });
+
+  return NextResponse.json(todo);
 }
 
+// Handle updating a Todo (toggle completed)
 export async function PATCH(req: NextRequest) {
   const { id, completed } = await req.json();
-  const data = await client.request<{ updateTodo: Todo }>(UPDATE_TODO, { id, completed });
-  return NextResponse.json(data.updateTodo);
+
+  // Update Todo
+  const updateData = await client.request<{ updateTodo: Todo }>(UPDATE_TODO, { id, completed });
+  const todo = updateData.updateTodo;
+
+  // Publish the updated Todo
+  await client.request(PUBLISH_TODO, { id });
+
+  return NextResponse.json(todo);
 }
 
+// Handle deleting a Todo
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
-  const data = await client.request<{ deleteTodo: { id: string } }>(DELETE_TODO, { id });
-  return NextResponse.json(data.deleteTodo);
+  const deleteData = await client.request<{ deleteTodo: { id: string } }>(DELETE_TODO, { id });
+  return NextResponse.json(deleteData.deleteTodo);
 }

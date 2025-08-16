@@ -8,10 +8,11 @@ interface TodoListProps {
   initialTodos: Todo[];
 }
 
-
+// Client-side component to display and manage Todos
 export default function TodoList({ initialTodos }: TodoListProps) {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
+  // Toggle completed status
   const toggleCompleted = async (todo: Todo) => {
     const res = await fetch('/api/todos', {
       method: 'PATCH',
@@ -22,15 +23,14 @@ export default function TodoList({ initialTodos }: TodoListProps) {
     setTodos(todos.map(t => (t.id === updatedTodo.id ? updatedTodo : t)));
   };
 
+  // Delete a Todo
   const deleteTodo = async (id: string) => {
     const res = await fetch('/api/todos', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     });
-    if (res.ok) {
-      setTodos(todos.filter(t => t.id !== id));
-    }
+    if (res.ok) setTodos(todos.filter(t => t.id !== id));
   };
 
   return (

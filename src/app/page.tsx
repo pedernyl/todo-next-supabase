@@ -3,9 +3,10 @@ import { gql } from 'graphql-request';
 import TodoList from '../components/TodoList';
 import { Todo } from '../../types';
 
+// Query to fetch published Todos
 const GET_TODOS = gql`
   query {
-    todos {
+    todos(stage: PUBLISHED) {
       id
       title
       description
@@ -15,6 +16,7 @@ const GET_TODOS = gql`
 `;
 
 export default async function Home() {
+  // Fetch Todos from Hygraph server-side
   const data = await client.request<{ todos: Todo[] }>(GET_TODOS);
   const todos = data.todos;
 

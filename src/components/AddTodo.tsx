@@ -7,12 +7,15 @@ interface AddTodoProps {
   onAdd: (todo: Todo) => void;
 }
 
+// Component for adding a new Todo
 export default function AddTodo({ onAdd }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Call API route to create and publish Todo
     const res = await fetch('/api/todos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,8 +23,9 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
     });
 
     if (!res.ok) return;
-
     const newTodo: Todo = await res.json();
+
+    // Update local state in client component
     onAdd(newTodo);
 
     setTitle('');
