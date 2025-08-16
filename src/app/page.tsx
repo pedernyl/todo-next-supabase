@@ -1,5 +1,6 @@
 import { client } from '../lib/hygraph';
 import { gql } from 'graphql-request';
+import TodoList from '../components/TodoList';
 import { Todo } from '../../types';
 
 const GET_TODOS = gql`
@@ -19,14 +20,8 @@ export default async function Home() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Todo-lista</h1>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>
-            <strong>{todo.title}</strong>: {todo.description} - {todo.completed ? '✅' : '❌'}
-          </li>
-        ))}
-      </ul>
+      <h1>Todo App</h1>
+      <TodoList initialTodos={todos} />
     </div>
   );
 }
