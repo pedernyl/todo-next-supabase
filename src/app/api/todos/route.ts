@@ -68,6 +68,10 @@ export async function POST(req: NextRequest) {
 
 // Handle updating a Todo (toggle completed)
 export async function PATCH(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { id, completed } = await req.json();
 
   // Update Todo
@@ -82,6 +86,10 @@ export async function PATCH(req: NextRequest) {
 
 // Handle deleting a Todo
 export async function DELETE(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { id } = await req.json();
   const deleteData = await client.request<{ deleteTodo: { id: string } }>(DELETE_TODO, { id });
   return NextResponse.json(deleteData.deleteTodo);
