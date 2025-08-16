@@ -7,48 +7,50 @@ interface AddTodoProps {
   onAdd: (todo: Todo) => void;
 }
 
-// Component for adding a new Todo
 export default function AddTodo({ onAdd }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Call API route to create and publish Todo
     const res = await fetch('/api/todos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, description }),
     });
-
     if (!res.ok) return;
     const newTodo: Todo = await res.json();
-
-    // Update local state in client component
     onAdd(newTodo);
-
     setTitle('');
     setDescription('');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-3 max-w-xl mx-auto mb-6"
+    >
       <input
         type="text"
         placeholder="Title"
         value={title}
         onChange={e => setTitle(e.target.value)}
         required
+        className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         type="text"
         placeholder="Description"
         value={description}
         onChange={e => setDescription(e.target.value)}
-        required
+        className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button type="submit">Add Todo</button>
+      <button
+        type="submit"
+        className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition"
+      >
+        Add Todo
+      </button>
     </form>
   );
 }

@@ -8,11 +8,9 @@ interface TodoListProps {
   initialTodos: Todo[];
 }
 
-// Client-side component to display and manage Todos
 export default function TodoList({ initialTodos }: TodoListProps) {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
-  // Toggle completed status
   const toggleCompleted = async (todo: Todo) => {
     const res = await fetch('/api/todos', {
       method: 'PATCH',
@@ -23,7 +21,6 @@ export default function TodoList({ initialTodos }: TodoListProps) {
     setTodos(todos.map(t => (t.id === updatedTodo.id ? updatedTodo : t)));
   };
 
-  // Delete a Todo
   const deleteTodo = async (id: string) => {
     const res = await fetch('/api/todos', {
       method: 'DELETE',
@@ -34,18 +31,37 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   return (
-    <div>
+    <div className="max-w-xl mx-auto">
       <AddTodo onAdd={todo => setTodos([todo, ...todos])} />
-      <ul>
+      <ul className="space-y-3">
         {todos.map(todo => (
-          <li key={todo.id} style={{ marginBottom: '10px' }}>
-            <strong>{todo.title}</strong>: {todo.description} - {todo.completed ? '✅' : '❌'}
-            <button onClick={() => toggleCompleted(todo)} style={{ marginLeft: '10px' }}>
-              {todo.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
-            </button>
-            <button onClick={() => deleteTodo(todo.id)} style={{ marginLeft: '5px' }}>
-              Delete
-            </button>
+          <li
+            key={todo.id}
+            className={`flex justify-between items-center p-4 rounded ${
+              todo.completed ? 'bg-green-100' : 'bg-red-100'
+            }`}
+          >
+            <div>
+              <strong>{todo.title}</strong>: {todo.description}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => toggleCompleted(todo)}
+                className={`px-3 py-1 rounded text-white ${
+                  todo.completed
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-yellow-500 hover:bg-yellow-600'
+                } transition`}
+              >
+                {todo.completed ? 'Incomplete' : 'Complete'}
+              </button>
+              <button
+                onClick={() => deleteTodo(todo.id)}
+                className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 transition"
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
