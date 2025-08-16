@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '../../../lib/hygraph';
 import { gql } from 'graphql-request';
 import { Todo } from '../../../../types';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
+
 
 // Mutation to create a Todo
 const CREATE_TODO = gql`
@@ -47,6 +50,10 @@ const DELETE_TODO = gql`
 
 // Handle creating a Todo
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { title, description } = await req.json();
 
   // Create Todo in draft
