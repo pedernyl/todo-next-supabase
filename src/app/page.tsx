@@ -1,6 +1,7 @@
 import { client } from '../lib/hygraph';
 import { gql } from 'graphql-request';
 import TodoList from '../components/TodoList';
+import AuthButtons from '../components/AuthButtons';
 import { Todo } from '../../types';
 
 const GET_TODOS = gql`
@@ -21,6 +22,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-100 p-10 font-sans">
       <h1 className="text-center text-3xl font-bold mb-8">Todo App</h1>
+      <AuthButtons />
       <TodoList initialTodos={todos} />
     </div>
   );
