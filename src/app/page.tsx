@@ -3,6 +3,9 @@ import { gql } from 'graphql-request';
 import TodoList from '../components/TodoList';
 import AuthButtons from '../components/AuthButtons';
 import { Todo } from '../../types';
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const GET_TODOS = gql`
   query {
@@ -16,6 +19,13 @@ const GET_TODOS = gql`
 `;
 
 export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  // If no user is logged in → redirect
+  if (!session) {
+    redirect("/login");
+  }
+  
   const data = await client.request<{ todos: Todo[] }>(GET_TODOS);
   const todos = data.todos;
 
