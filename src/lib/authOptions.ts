@@ -1,6 +1,9 @@
 import { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
+// Read allowed users from environment variable
+const allowedUsers = process.env.NEXTAUTH_ALLOWED_USERS?.split(",") || [];
+
 export const authOptions: AuthOptions = {
   providers: [
     GithubProvider({
@@ -13,11 +16,12 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    // optional: restrict login to certain emails
     async signIn({ user }) {
-      // Allow only specific email(s) if needed
-      // return user.email === "youremail@example.com";
-      return true; // allow all GitHub users
+      // Only allow users in the allowedUsers list
+      if (user.email && allowedUsers.includes(user.email)) {
+        return true;
+      }
+      return false;
     },
   },
 };
