@@ -1,20 +1,13 @@
-import "./globals.css";
-import Providers from "./providers";
+"use client";
 
-export const metadata = {
-  title: "Todo App",
-  description: "Next.js + Hygraph Todo App with Auth",
-};
+import { SessionProvider } from "next-auth/react";
+import type { ReactNode } from "react";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

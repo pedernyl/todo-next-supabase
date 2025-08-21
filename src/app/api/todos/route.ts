@@ -3,7 +3,7 @@ import { client } from '../../../lib/hygraph';
 import { gql } from 'graphql-request';
 import { Todo } from '../../../../types';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/authOptions";
 
 
 // Mutation to create a Todo

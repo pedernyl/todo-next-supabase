@@ -5,7 +5,7 @@ import AuthButtons from '../components/AuthButtons';
 import { Todo } from '../../types';
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../lib/authOptions";
 
 const GET_TODOS = gql`
   query {
