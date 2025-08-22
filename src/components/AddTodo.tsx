@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { Todo } from '../../types';
 
 interface AddTodoProps {
-  onAdd: (todo: Todo) => void;
+  onTodoAdded?: (todo: Todo) => void;
 }
 
-export default function AddTodo({ onAdd }: AddTodoProps) {
+export default function AddTodo({ onTodoAdded }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -20,7 +20,7 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
     });
     if (!res.ok) return;
     const newTodo: Todo = await res.json();
-    onAdd(newTodo);
+    onTodoAdded?.(newTodo);
     setTitle('');
     setDescription('');
   };

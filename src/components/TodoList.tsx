@@ -2,6 +2,7 @@
 
 import React from "react"; 
 import { Todo } from "../../types";
+import AddTodo from "./AddTodo";
 
 interface TodoListProps {
   initialTodos: Todo[];
@@ -10,6 +11,10 @@ interface TodoListProps {
 export default function TodoList({ initialTodos }: TodoListProps) {
   const [todos, setTodos] = React.useState(initialTodos);
 
+  const handleTodoAdded = (newTodo: Todo) => {
+    setTodos((prev) => [newTodo, ...prev]);
+  };
+
   const toggleTodo = (id: string, completed: boolean) => {
     setTodos((prev) =>
       prev.map((t) => (t.id === id ? { ...t, completed } : t))
@@ -17,6 +22,11 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   return (
+  <div className="space-y-4">
+    {/* AddTodo form */}
+    <AddTodo onTodoAdded={handleTodoAdded} />
+
+    {/* Todo list */}
     <ul className="space-y-2">
       {todos
         .slice()
@@ -38,5 +48,6 @@ export default function TodoList({ initialTodos }: TodoListProps) {
           </li>
         ))}
     </ul>
-  );
+  </div>
+);
 }
