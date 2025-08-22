@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react"; // 👈 viktigt
+import React from "react"; 
 import { Todo } from "../../types";
 
 interface TodoListProps {
