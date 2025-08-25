@@ -27,8 +27,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
         body: JSON.stringify({ id, completed }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update todo");
+        throw new Error(`Failed to update todo: ${response.status} ${response.statusText}`);
       }
 
       const updatedTodo = await response.json();
