@@ -17,7 +17,7 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }) {
-      // Only allow users in the allowedUsers list
+      // Restrict access to users in the allowedUsers list
       if (user.email && allowedUsers.includes(user.email)) {
         return true;
       }
