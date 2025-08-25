@@ -32,9 +32,9 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       }
 
       const updatedTodo = await response.json();
-      setTodos((prev) =>
-        prev.map((t) => (t.id === id ? updatedTodo : t))
-      );
+      setTodos((prev) => {
+        return prev.map((t) => (t.id === id ? updatedTodo : t));
+    });
     } catch (error) {
       console.error("Failed to update todo via API route:", error);
     }
