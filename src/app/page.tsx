@@ -21,7 +21,7 @@ const GET_TODOS = gql`
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  // If no user is logged in → redirect
+  // Redirect if no user is logged in
   if (!session) {
     redirect("/login");
   }

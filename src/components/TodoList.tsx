@@ -10,20 +10,37 @@ interface TodoListProps {
 
 export default function TodoList({ initialTodos }: TodoListProps) {
   const [todos, setTodos] = React.useState(initialTodos);
-  // State för att hålla koll på vilka beskrivningar som är öppna
+  // State to keep track of which descriptions are open
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
 
   const handleTodoAdded = (newTodo: Todo) => {
     setTodos((prev) => [newTodo, ...prev]);
   };
 
-  const toggleTodo = (id: string, completed: boolean) => {
-    setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed } : t))
-    );
+  const toggleTodo = async (id: string, completed: boolean) => {
+    try {
+      const response = await fetch("/api/todos", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, completed }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update todo");
+      }
+
+      const updatedTodo = await response.json();
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? updatedTodo : t))
+      );
+    } catch (error) {
+      console.error("Failed to update todo via API route:", error);
+    }
   };
 
-  // Toggle-funktion för beskrivning
+  // Toggle function for description
   const toggleDescription = (id: string) => {
     setOpenDescriptions(prev => ({
       ...prev,
