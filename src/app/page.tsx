@@ -1,22 +1,10 @@
-import { client } from '../lib/hygraph';
-import { gql } from 'graphql-request';
+import { getTodos } from '../lib/dataService';
 import TodoList from '../components/TodoList';
 import AuthButtons from '../components/AuthButtons';
 import { Todo } from '../../types';
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/authOptions";
-
-const GET_TODOS = gql`
-  query {
-    todos(stage: PUBLISHED) {
-      id
-      title
-      description
-      completed
-    }
-  }
-`;
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -25,9 +13,8 @@ export default async function Home() {
   if (!session) {
     redirect("/login");
   }
-  
-  const data = await client.request<{ todos: Todo[] }>(GET_TODOS);
-  const todos = data.todos;
+
+  const todos = await getTodos();
 
   return (
     <div className="min-h-screen bg-gray-100 p-10 font-sans">
