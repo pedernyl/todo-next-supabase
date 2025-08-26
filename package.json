@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "graphql-request": "^7.2.0",
+    "@supabase/supabase-js": "^2.56.0",
     "next": "15.4.6",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
