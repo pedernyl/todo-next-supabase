@@ -16,7 +16,7 @@ export async function getTodos(): Promise<Todo[]> {
 export async function createTodo(title: string, description: string): Promise<Todo> {
   const { data, error } = await supabase
     .from('todos')
-    .insert([{ title, description, completed: false }])
+    .insert([{ title, description, owned_by: 1,completed: false }])
     .select()
     .single();
 
