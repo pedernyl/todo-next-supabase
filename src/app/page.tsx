@@ -8,7 +8,7 @@ import { authOptions } from "../lib/authOptions";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
+  
   // Redirect if no user is logged in
   if (!session) {
     redirect("/login");
