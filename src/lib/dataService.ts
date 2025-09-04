@@ -6,9 +6,14 @@ import { getServerSession } from "next-auth";
 
 // Fetch all todos from Supabase
 export async function getTodos(): Promise<Todo[]> {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error("User not authenticated");
+
   const { data, error } = await supabase
     .from('todos')
     .select('*')
+    // Filter todos by the authenticated user's email
+    .eq('owner_mail', session.user?.email)
     .order('id', { ascending: true });
 
   if (error) throw error;
