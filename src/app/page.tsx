@@ -17,9 +17,12 @@ export default async function Home() {
   const todos = await getTodos();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10 font-sans">
-      <h1 className="text-center text-3xl font-bold mb-8">Todo App</h1>
-      <AuthButtons />
+    <div className="min-h-screen bg-gray-100 p-10 font-sans relative">
+      {/* AuthButtons in upper left corner */}
+  <div className="absolute left-10 top-2 z-10">
+        <AuthButtons />
+      </div>
+      <h1 className="text-center text-3xl font-bold mb-8 mt-16">Todo App</h1>
       <TodoList initialTodos={todos} />
     </div>
   );
