@@ -9,8 +9,31 @@ interface TodoListProps {
 }
 
 export default function TodoList({ initialTodos }: TodoListProps) {
+
   const [todos, setTodos] = React.useState(initialTodos);
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
+  const [showCompleted, setShowCompleted] = React.useState(true);
+
+  // Fetch todos from Supabase with filter
+  const fetchTodos = async (showCompleted: boolean) => {
+    try {
+      const response = await fetch(`/api/todos?showCompleted=${showCompleted}`);
+      if (!response.ok) throw new Error('Failed to fetch todos');
+      const data = await response.json();
+      setTodos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Toggle show/hide completed todos
+  const handleToggleShowCompleted = () => {
+    setShowCompleted((prev) => {
+      const newValue = !prev;
+      fetchTodos(newValue);
+      return newValue;
+    });
+  };
 
   const handleTodoAdded = (newTodo: Todo) => {
     setTodos((prev) => [newTodo, ...prev]);
@@ -48,6 +71,14 @@ export default function TodoList({ initialTodos }: TodoListProps) {
 
   return (
     <div className="space-y-4">
+      {/* Toggle show/hide completed todos */}
+      <button
+        onClick={handleToggleShowCompleted}
+        className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm"
+      >
+        {showCompleted ? "Hide completed" : "Show completed"}
+      </button>
+
       {/* AddTodo form */}
       <AddTodo onTodoAdded={handleTodoAdded} />
 

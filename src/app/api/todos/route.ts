@@ -1,3 +1,18 @@
+// Handle fetching todos with optional completed filter
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const url = new URL(req.url);
+  const showCompleted = url.searchParams.get('showCompleted');
+  // Default to true if not provided
+  const showCompletedBool = showCompleted === null ? true : showCompleted === 'true';
+  // Import getTodos dynamically to avoid circular imports
+  const { getTodos } = await import('../../../lib/dataService');
+  const todos = await getTodos(showCompletedBool);
+  return NextResponse.json(todos);
+}
 import { NextRequest, NextResponse } from 'next/server';
 import { createTodo, updateTodo, deleteTodo } from '../../../lib/dataService';
 import { getServerSession } from "next-auth/next";
