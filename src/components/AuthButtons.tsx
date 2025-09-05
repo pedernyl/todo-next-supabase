@@ -7,11 +7,11 @@ export default function AuthButtons() {
 
   if (session) {
     return (
-  <div className="flex items-center justify-between max-w-xl mx-auto">
+  <div className="flex items-center justify-between max-w-xl mx-auto gap-1">
         <span className="text-gray-700">Welcome, {session.user?.name}</span>
         <button
           onClick={() => signOut()}
-          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+          className="bg-gray-400 text-white px-3 py-1 rounded border border-blue-500 hover:bg-gray-500 transition"
         >
           Sign out
         </button>
