@@ -13,6 +13,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   const [todos, setTodos] = React.useState(initialTodos);
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
   const [showCompleted, setShowCompleted] = React.useState(true);
+  const [showAddForm, setShowAddForm] = React.useState(false);
 
   // Fetch todos from Supabase with filter
   const fetchTodos = async (showCompleted: boolean) => {
@@ -81,8 +82,18 @@ export default function TodoList({ initialTodos }: TodoListProps) {
         </button>
       </div>
 
-      {/* AddTodo form */}
-      <AddTodo onTodoAdded={handleTodoAdded} />
+      {/* Show/hide AddTodo form link */}
+      <div>
+        <button
+          onClick={() => setShowAddForm((prev) => !prev)}
+          className="text-blue-600 hover:underline text-sm mb-2"
+        >
+          {showAddForm ? "Hide Add Todo" : "Add Todo"}
+        </button>
+      </div>
+
+      {/* AddTodo form (conditionally rendered) */}
+      {showAddForm && <AddTodo onTodoAdded={handleTodoAdded} />}
 
       {/* Todo list */}
       <ul className="space-y-2">
