@@ -71,13 +71,15 @@ export default function TodoList({ initialTodos }: TodoListProps) {
 
   return (
     <div className="space-y-4">
-      {/* Toggle show/hide completed todos */}
-      <button
-        onClick={handleToggleShowCompleted}
-        className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm"
-      >
-        {showCompleted ? "Hide completed" : "Show completed"}
-      </button>
+      {/* Toggle show/hide completed todos, placed above and right */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleToggleShowCompleted}
+          className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition text-sm"
+        >
+          {showCompleted ? "Hide completed" : "Show completed"}
+        </button>
+      </div>
 
       {/* AddTodo form */}
       <AddTodo onTodoAdded={handleTodoAdded} />
