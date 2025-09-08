@@ -1,3 +1,15 @@
+// Update a todo's title and description in Supabase
+export async function updateTodoDetails(id: string, title: string, description: string): Promise<Todo> {
+  const { data, error } = await supabase
+    .from('todos')
+    .update({ title, description })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as Todo;
+}
 import { supabase } from './supabaseClient';
 import { Todo } from '../../types';
 import { authOptions } from "../lib/authOptions";

@@ -14,6 +14,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
   const [showCompleted, setShowCompleted] = React.useState(true);
   const [showAddForm, setShowAddForm] = React.useState(false);
+  const [editTodo, setEditTodo] = React.useState<Todo | null>(null);
 
   // Fetch todos from Supabase with filter
   const fetchTodos = async (showCompleted: boolean) => {
@@ -38,6 +39,13 @@ export default function TodoList({ initialTodos }: TodoListProps) {
 
   const handleTodoAdded = (newTodo: Todo) => {
     setTodos((prev) => [newTodo, ...prev]);
+    setEditTodo(null);
+    setShowAddForm(false);
+  };
+
+  const handleEdit = (todo: Todo) => {
+    setEditTodo(todo);
+    setShowAddForm(true);
   };
 
   const toggleTodo = async (id: string, completed: boolean) => {
@@ -93,7 +101,12 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       </div>
 
       {/* AddTodo form (conditionally rendered) */}
-      {showAddForm && <AddTodo onTodoAdded={handleTodoAdded} />}
+      {showAddForm && (
+        <AddTodo
+          onTodoAdded={handleTodoAdded}
+          editTodo={editTodo}
+        />
+      )}
 
       {/* Todo list */}
       <ul className="space-y-2">
@@ -127,6 +140,14 @@ export default function TodoList({ initialTodos }: TodoListProps) {
               {openDescriptions[todo.id] && todo.description && (
                 <div className="mt-2 text-gray-700 text-sm border-l-4 border-blue-200 pl-4">
                   {todo.description}
+                  <div>
+                    <button
+                      className="text-blue-600 hover:underline text-xs ml-2"
+                      onClick={() => handleEdit(todo)}
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </div>
               )}
             </li>
