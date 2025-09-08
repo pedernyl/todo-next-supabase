@@ -37,9 +37,20 @@ export async function PATCH(req: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id, completed } = await req.json();
+  const body = await req.json();
+  const { id, completed, title, description } = body;
 
-  const todo = await updateTodo(id, completed);
+  let todo;
+  if (typeof completed !== 'undefined' && typeof title === 'undefined' && typeof description === 'undefined') {
+    // Only completed status is being updated
+    todo = await updateTodo(id, completed);
+  } else if (typeof title !== 'undefined' || typeof description !== 'undefined') {
+    // Title/description update
+    const { updateTodoDetails } = await import('../../../lib/dataService');
+    todo = await updateTodoDetails(id, title, description);
+  } else {
+    return NextResponse.json({ error: "Invalid PATCH payload" }, { status: 400 });
+  }
 
   return NextResponse.json(todo);
 }

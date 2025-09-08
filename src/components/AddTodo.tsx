@@ -1,26 +1,52 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Todo } from '../../types';
 
 interface AddTodoProps {
   onTodoAdded?: (todo: Todo) => void;
+  editTodo?: Todo | null;
+  onTodoUpdated?: (todo: Todo) => void;
 }
 
-export default function AddTodo({ onTodoAdded }: AddTodoProps) {
+export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  // Load todo into form when editing
+  useEffect(() => {
+    if (editTodo) {
+      setTitle(editTodo.title);
+      setDescription(editTodo.description || '');
+    } else {
+      setTitle('');
+      setDescription('');
+    }
+  }, [editTodo]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/todos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description }),
-    });
-    if (!res.ok) return;
-    const newTodo: Todo = await res.json();
-    onTodoAdded?.(newTodo);
+    if (editTodo && editTodo.id) {
+      // Update existing todo
+      const res = await fetch('/api/todos', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editTodo.id, title, description }),
+      });
+      if (!res.ok) return;
+      const updatedTodo: Todo = await res.json();
+      onTodoUpdated?.(updatedTodo);
+    } else {
+      // Create new todo
+      const res = await fetch('/api/todos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+      if (!res.ok) return;
+      const newTodo: Todo = await res.json();
+      onTodoAdded?.(newTodo);
+    }
     setTitle('');
     setDescription('');
   };
