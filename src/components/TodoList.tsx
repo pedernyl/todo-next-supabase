@@ -114,7 +114,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
                     onClick={() => toggleDescription(todo.id)}
                     className="px-2 py-1 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100 text-sm"
                   >
-                    {openDescriptions[todo.id] ? "Dölj beskrivning" : "Visa beskrivning"}
+                    {openDescriptions[todo.id] ? "Hide Description" : "Show Description"}
                   </button>
                   <button
                     onClick={() => toggleTodo(todo.id, !todo.completed)}
