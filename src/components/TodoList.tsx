@@ -105,6 +105,11 @@ export default function TodoList({ initialTodos }: TodoListProps) {
         <AddTodo
           onTodoAdded={handleTodoAdded}
           editTodo={editTodo}
+          onTodoUpdated={async () => {
+            await fetchTodos(showCompleted);
+            setEditTodo(null);
+            setShowAddForm(false);
+          }}
         />
       )}
 
