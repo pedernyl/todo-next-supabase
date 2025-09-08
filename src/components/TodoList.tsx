@@ -137,7 +137,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
                   </button>
                 </div>
               </div>
-              {openDescriptions[todo.id] && todo.description && (
+              {openDescriptions[todo.id] && (
                 <div className="mt-2 text-gray-700 text-sm border-l-4 border-blue-200 pl-4">
                   {todo.description}
                   <div>
