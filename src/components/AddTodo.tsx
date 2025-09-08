@@ -38,12 +38,11 @@ export default function AddTodo({ onTodoAdded }: AddTodoProps) {
         required
         className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <input
-        type="text"
+      <textarea
         placeholder="Description"
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[80px]"
       />
       <button
         type="submit"
