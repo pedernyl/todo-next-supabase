@@ -4,4 +4,5 @@ export interface Todo {
   title: string;
   description: string;
   completed: boolean;
+  parent_todo?: string | null;
 }
