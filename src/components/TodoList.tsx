@@ -1,5 +1,14 @@
+
 "use client";
-// Bygg trädstruktur från flat todo-array
+import React from "react";
+import { Todo } from "../../types";
+import AddTodo from "./AddTodo";
+
+interface TodoListProps {
+  initialTodos: Todo[];
+}
+
+// Build tree structure from flat todo array
 function buildTodoTree(todos: Todo[]): any[] {
   const todoMap: { [id: string]: any } = {};
   const roots: any[] = [];
@@ -15,7 +24,7 @@ function buildTodoTree(todos: Todo[]): any[] {
       roots.push(todoMap[todo.id]);
     }
   });
-  // Sortera varje nivå
+  // Sort each level
   function sortTree(nodes: any[]) {
     nodes.sort((a, b) => Number(a.completed) - Number(b.completed) || Number(b.id) - Number(a.id));
     nodes.forEach((n) => n.children && sortTree(n.children));
@@ -24,17 +33,17 @@ function buildTodoTree(todos: Todo[]): any[] {
   return roots;
 }
 
-// Rekursiv rendering med indentering
+// Recursive rendering with indentation
 function renderTodoTree(
   tree: any[],
-  level = 0,
+  level: number,
   toggleDescription: (id: string) => void,
   openDescriptions: { [id: string]: boolean },
   toggleTodo: (id: string, completed: boolean) => void,
   handleCreateSubTodo: (todo: Todo) => void,
   handleEdit: (todo: Todo) => void
 ) {
-  return tree.map((todo) => (
+  return tree.map((todo: any) => (
     <li
       key={todo.id}
       className={`flex flex-col gap-2 p-4 bg-white rounded-xl shadow hover:shadow-md transition`}
@@ -93,13 +102,6 @@ function renderTodoTree(
       )}
     </li>
   ));
-}
-import React from "react";
-import { Todo } from "../../types";
-import AddTodo from "./AddTodo";
-
-interface TodoListProps {
-  initialTodos: Todo[];
 }
 
 export default function TodoList({ initialTodos }: TodoListProps) {
