@@ -38,7 +38,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   const handleTodoAdded = (newTodo: Todo) => {
-    setTodos((prev) => [newTodo, ...prev]);
+    setTodos((prev) => [newTodo, ...prev]); // Already adds to top, but sort below must not override
     setEditTodo(null);
     setShowAddForm(false);
   };
@@ -115,9 +115,8 @@ export default function TodoList({ initialTodos }: TodoListProps) {
 
       {/* Todo list */}
       <ul className="space-y-2">
-        {todos
-          .slice()
-          .sort((a, b) => Number(a.completed) - Number(b.completed))
+        {[...todos]
+          .sort((a, b) => Number(a.completed) - Number(b.completed) || Number(b.id) - Number(a.id))
           .map((todo) => (
             <li
               key={todo.id}
