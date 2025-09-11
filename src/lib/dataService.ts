@@ -37,17 +37,16 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
 }
 
 // Create a new todo in Supabase
-export async function createTodo(title: string, description: string): Promise<Todo> {
-
+export async function createTodo(title: string, description: string, parent_todo?: string): Promise<Todo> {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("User not authenticated");
-  
+  const insertObj: any = { title, description, owner_mail: session.user?.email, completed: false };
+  if (parent_todo) insertObj.parent_todo = parent_todo;
   const { data, error } = await supabase
     .from('todos')
-    .insert([{ title, description, owner_mail: session.user?.email, completed: false }])
+    .insert([insertObj])
     .select()
     .single();
-
   if (error) throw error;
   return data as Todo;
 }
