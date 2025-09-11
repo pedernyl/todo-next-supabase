@@ -117,7 +117,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       <ul className="space-y-2">
         {todos
           .slice()
-          .sort((a, b) => Number(a.completed) - Number(b.completed))
+          .sort((a, b) => Number(a.completed) - Number(b.completed) || Number(a.id) - Number(b.id))
           .map((todo) => (
             <li
               key={todo.id}
