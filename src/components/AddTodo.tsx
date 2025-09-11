@@ -7,9 +7,10 @@ interface AddTodoProps {
   onTodoAdded?: (todo: Todo) => void;
   editTodo?: Todo | null;
   onTodoUpdated?: (todo: Todo) => void;
+  parentTodo?: Todo | null;
 }
 
-export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated }: AddTodoProps) {
+export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTodo }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -37,11 +38,11 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated }: AddTod
       const updatedTodo: Todo = await res.json();
       onTodoUpdated?.(updatedTodo);
     } else {
-      // Create new todo
+      // Create new todo or sub-todo
       const res = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, parent_todo: parentTodo?.id }),
       });
       if (!res.ok) return;
       const newTodo: Todo = await res.json();
@@ -56,6 +57,11 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated }: AddTod
       onSubmit={handleSubmit}
       className="flex flex-col gap-3 max-w-xl mx-auto mb-6"
     >
+      {parentTodo && (
+        <div className="text-sm text-gray-600 mb-2">
+          Parent Todo: <span className="font-semibold">{parentTodo.title}</span>
+        </div>
+      )}
       <input
         type="text"
         placeholder="Title"

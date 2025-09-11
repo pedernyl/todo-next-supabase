@@ -15,6 +15,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   const [showCompleted, setShowCompleted] = React.useState(true);
   const [showAddForm, setShowAddForm] = React.useState(false);
   const [editTodo, setEditTodo] = React.useState<Todo | null>(null);
+  const [parentTodo, setParentTodo] = React.useState<Todo | null>(null);
 
   // Fetch todos from Supabase with filter
   const fetchTodos = async (showCompleted: boolean) => {
@@ -38,9 +39,16 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   const handleTodoAdded = (newTodo: Todo) => {
-    setTodos((prev) => [newTodo, ...prev]); // Already adds to top, but sort below must not override
+    setTodos((prev) => [newTodo, ...prev]);
     setEditTodo(null);
+    setParentTodo(null);
     setShowAddForm(false);
+  };
+
+  const handleCreateSubTodo = (todo: Todo) => {
+    setParentTodo(todo);
+    setShowAddForm(true);
+    setEditTodo(null);
   };
 
   const handleEdit = (todo: Todo) => {
@@ -105,9 +113,11 @@ export default function TodoList({ initialTodos }: TodoListProps) {
         <AddTodo
           onTodoAdded={handleTodoAdded}
           editTodo={editTodo}
+          parentTodo={parentTodo}
           onTodoUpdated={async () => {
             await fetchTodos(showCompleted);
             setEditTodo(null);
+            setParentTodo(null);
             setShowAddForm(false);
           }}
         />
@@ -138,6 +148,12 @@ export default function TodoList({ initialTodos }: TodoListProps) {
                     className="px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
                   >
                     {todo.completed ? "Undo" : "Complete"}
+                  </button>
+                  <button
+                    onClick={() => handleCreateSubTodo(todo)}
+                    className="px-2 py-1 rounded-lg border border-blue-500 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm"
+                  >
+                    Create subTodo
                   </button>
                 </div>
               </div>
