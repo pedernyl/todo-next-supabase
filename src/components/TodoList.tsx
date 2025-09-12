@@ -54,12 +54,13 @@ function renderTodoTree(
           {todo.title}
         </span>
         <div className="flex gap-2">
-          <button
-            onClick={() => toggleDescription(todo.id)}
-            className="px-2 py-1 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100 text-sm"
+          <a
+            href="#"
+            onClick={e => { e.preventDefault(); toggleDescription(todo.id); }}
+            className="text-blue-600 hover:underline text-sm cursor-pointer"
           >
             {openDescriptions[todo.id] ? "Hide Description" : "Show Description"}
-          </button>
+          </a>
         </div>
       </div>
       {openDescriptions[todo.id] && (
