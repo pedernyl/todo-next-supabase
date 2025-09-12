@@ -60,24 +60,24 @@ function renderTodoTree(
           >
             {openDescriptions[todo.id] ? "Hide Description" : "Show Description"}
           </button>
-          <button
-            onClick={() => toggleTodo(todo.id, !todo.completed)}
-            className="px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
-          >
-            {todo.completed ? "Undo" : "Complete"}
-          </button>
-          <button
-            onClick={() => handleCreateSubTodo(todo)}
-            className="px-2 py-1 rounded-lg border border-blue-500 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm"
-          >
-            Create subTodo
-          </button>
         </div>
       </div>
       {openDescriptions[todo.id] && (
         <div className="mt-2 text-gray-700 text-sm border-l-4 border-blue-200 pl-4">
           {todo.description}
-          <div>
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => toggleTodo(todo.id, !todo.completed)}
+              className="px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              {todo.completed ? "Undo" : "Complete"}
+            </button>
+            <button
+              onClick={() => handleCreateSubTodo(todo)}
+              className="px-2 py-1 rounded-lg border border-blue-500 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm"
+            >
+              Create subTodo
+            </button>
             <button
               className="text-blue-600 hover:underline text-xs ml-2"
               onClick={() => handleEdit(todo)}
