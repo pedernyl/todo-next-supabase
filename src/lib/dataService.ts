@@ -25,6 +25,7 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
     .from('todos')
     .select('*')
     .eq('owner_mail', session.user?.email)
+    .is('deleted_timestamp', null)
     .order('id', { ascending: true });
 
   if (!showCompleted) {
@@ -64,15 +65,15 @@ export async function updateTodo(id: string, completed: boolean): Promise<Todo> 
   return data as Todo;
 }
 
-// Delete a todo from Supabase
-export async function deleteTodo(id: string): Promise<{ id: string }> {
+// Soft delete a todo: set deleted_timestamp and deleted_by (can be user id or email)
+export async function softDeleteTodo(id: string, userId: string | number): Promise<Todo> {
+  const deleted_timestamp = Math.floor(Date.now() / 1000);
   const { data, error } = await supabase
     .from('todos')
-    .delete()
+    .update({ deleted_timestamp, deleted_by: String(userId) })
     .eq('id', id)
-    .select('id')
+    .select()
     .single();
-
   if (error) throw error;
-  return data as { id: string };
+  return data as Todo;
 }

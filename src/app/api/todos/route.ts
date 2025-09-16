@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(todos);
 }
 import { NextRequest, NextResponse } from 'next/server';
-import { createTodo, updateTodo, deleteTodo } from '../../../lib/dataService';
+import { createTodo, updateTodo } from '../../../lib/dataService';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../lib/authOptions";
 
@@ -55,13 +55,19 @@ export async function PATCH(req: NextRequest) {
   return NextResponse.json(todo);
 }
 
-// Handle deleting a Todo
+// Handle soft deleting a Todo
 export async function DELETE(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await req.json();
-  const deleted = await deleteTodo(id);
+  const { id, deleted_by } = await req.json();
+  // Use deleted_by from request if provided, otherwise fallback to session
+  const userId = deleted_by || session.user?.id || session.user?.sub || session.user?.email || null;
+  if (!userId) {
+    return NextResponse.json({ error: "User id/email not found in session" }, { status: 400 });
+  }
+  const { softDeleteTodo } = await import('../../../lib/dataService');
+  const deleted = await softDeleteTodo(id, userId);
   return NextResponse.json(deleted);
 }

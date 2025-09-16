@@ -1,6 +1,8 @@
 
+
 "use client";
 import React from "react";
+import { useUserId } from "../context/UserIdContext";
 import { Todo } from "../../types";
 import AddTodo from "./AddTodo";
 
@@ -41,7 +43,9 @@ function renderTodoTree(
   openDescriptions: { [id: string]: boolean },
   toggleTodo: (id: string, completed: boolean) => void,
   handleCreateSubTodo: (todo: Todo) => void,
-  handleEdit: (todo: Todo) => void
+  handleEdit: (todo: Todo) => void,
+  handleDelete: (todo: Todo) => void,
+  userId: number | null
 ) {
   return tree.map((todo: any) => (
     <li
@@ -85,6 +89,22 @@ function renderTodoTree(
             >
               Edit
             </button>
+            {typeof userId === 'undefined' || userId === null ? (
+              <span className="text-gray-400 text-xs ml-2">Loading...</span>
+            ) : (
+              <a
+                href="#"
+                className="text-red-600 hover:underline text-xs ml-2"
+                onClick={e => {
+                  e.preventDefault();
+                  if (window.confirm("Are you sure you want to delete this todo?")) {
+                    handleDelete(todo);
+                  }
+                }}
+              >
+                Delete
+              </a>
+            )}
           </div>
         </div>
       )}
@@ -97,7 +117,9 @@ function renderTodoTree(
             openDescriptions,
             toggleTodo,
             handleCreateSubTodo,
-            handleEdit
+            handleEdit,
+            handleDelete,
+            userId
           )}
         </ul>
       )}
@@ -106,6 +128,26 @@ function renderTodoTree(
 }
 
 export default function TodoList({ initialTodos }: TodoListProps) {
+  const { userId } = useUserId();
+
+  // Soft delete a todo
+  const handleDelete = async (todo: Todo) => {
+    if (!userId) {
+      alert("User id not loaded. Please try again.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/todos", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: todo.id, deleted_by: userId }),
+      });
+      if (!response.ok) throw new Error("Failed to delete todo");
+      setTodos((prev: Todo[]) => prev.filter((t: Todo) => t.id !== todo.id));
+    } catch (error) {
+      alert("Failed to delete todo");
+    }
+  };
 
   const [todos, setTodos] = React.useState(initialTodos);
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
@@ -229,7 +271,9 @@ export default function TodoList({ initialTodos }: TodoListProps) {
           openDescriptions,
           toggleTodo,
           handleCreateSubTodo,
-          handleEdit
+          handleEdit,
+          handleDelete,
+          userId
         )}
       </ul>
     </div>
