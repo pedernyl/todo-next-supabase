@@ -8,9 +8,10 @@ interface AddTodoProps {
   editTodo?: Todo | null;
   onTodoUpdated?: (todo: Todo) => void;
   parentTodo?: Todo | null;
+  userId: number | null;
 }
 
-export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTodo }: AddTodoProps) {
+export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTodo, userId }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -39,10 +40,14 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
       onTodoUpdated?.(updatedTodo);
     } else {
       // Create new todo or sub-todo
+      if (!userId) {
+        alert("User id not loaded. Please try again.");
+        return;
+      }
       const res = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, parent_todo: parentTodo?.id }),
+        body: JSON.stringify({ title, description, parent_todo: parentTodo?.id, owner_id: userId }),
       });
       if (!res.ok) return;
       const newTodo: Todo = await res.json();

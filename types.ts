@@ -4,6 +4,7 @@ export interface Todo {
   title: string;
   description: string;
   completed: boolean;
+  owner_id: number;
   parent_todo?: string | null;
   deleted_timestamp?: number | null;
   deleted_by?: number | null;
