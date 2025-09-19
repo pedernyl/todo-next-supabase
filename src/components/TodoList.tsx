@@ -253,6 +253,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
           onTodoAdded={handleTodoAdded}
           editTodo={editTodo}
           parentTodo={parentTodo}
+          userId={userId}
           onTodoUpdated={async () => {
             await fetchTodos(showCompleted);
             setEditTodo(null);
