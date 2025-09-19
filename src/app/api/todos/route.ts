@@ -62,10 +62,10 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id, deleted_by } = await req.json();
-  // Use deleted_by from request if provided, otherwise fallback to session
-  const userId = deleted_by || session.user?.id || session.user?.sub || session.user?.email || null;
-  if (!userId) {
-    return NextResponse.json({ error: "User id/email not found in session" }, { status: 400 });
+  // Always require deleted_by to be a user id (number)
+  const userId = deleted_by;
+  if (!userId || typeof userId !== 'number') {
+    return NextResponse.json({ error: "User id (number) required for deleted_by" }, { status: 400 });
   }
   const { softDeleteTodo } = await import('../../../lib/dataService');
   const deleted = await softDeleteTodo(id, userId);
