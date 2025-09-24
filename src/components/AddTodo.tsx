@@ -40,7 +40,7 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
       onTodoUpdated?.(updatedTodo);
     } else {
       // Create new todo or sub-todo
-      if (!userId) {
+      if (typeof userId !== 'number') {
         alert("User id not loaded. Please try again.");
         return;
       }
