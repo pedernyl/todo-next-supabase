@@ -1,3 +1,7 @@
+// Type for tree node used in buildTodoTree and renderTodoTree
+interface TodoTreeNode extends Todo {
+  children: TodoTreeNode[];
+}
 
 
 "use client";
@@ -11,9 +15,9 @@ interface TodoListProps {
 }
 
 // Build tree structure from flat todo array
-function buildTodoTree(todos: Todo[]): any[] {
-  const todoMap: { [id: string]: any } = {};
-  const roots: any[] = [];
+function buildTodoTree(todos: Todo[]): TodoTreeNode[] {
+  const todoMap: { [id: string]: TodoTreeNode } = {};
+  const roots: TodoTreeNode[] = [];
   todos.forEach((todo) => {
     todoMap[todo.id] = { ...todo, children: [] };
   });
@@ -27,7 +31,7 @@ function buildTodoTree(todos: Todo[]): any[] {
     }
   });
   // Sort each level
-  function sortTree(nodes: any[]) {
+  function sortTree(nodes: TodoTreeNode[]) {
     nodes.sort((a, b) => Number(a.completed) - Number(b.completed) || Number(b.id) - Number(a.id));
     nodes.forEach((n) => n.children && sortTree(n.children));
   }
@@ -37,7 +41,7 @@ function buildTodoTree(todos: Todo[]): any[] {
 
 // Recursive rendering with indentation
 function renderTodoTree(
-  tree: any[],
+  tree: TodoTreeNode[],
   level: number,
   toggleDescription: (id: string) => void,
   openDescriptions: { [id: string]: boolean },
@@ -47,7 +51,7 @@ function renderTodoTree(
   handleDelete: (todo: Todo) => void,
   userId: number | null
 ) {
-  return tree.map((todo: any) => (
+  return tree.map((todo: TodoTreeNode) => (
     <li
       key={todo.id}
       className={`flex flex-col gap-2 p-4 bg-white rounded-xl shadow hover:shadow-md transition`}
@@ -144,7 +148,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       });
       if (!response.ok) throw new Error("Failed to delete todo");
       setTodos((prev: Todo[]) => prev.filter((t: Todo) => t.id !== todo.id));
-    } catch (error) {
+    } catch {
       alert("Failed to delete todo");
     }
   };
@@ -163,8 +167,8 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       if (!response.ok) throw new Error('Failed to fetch todos');
       const data = await response.json();
       setTodos(data);
-    } catch (error) {
-      console.error(error);
+    } catch {
+      // error intentionally ignored
     }
   };
 

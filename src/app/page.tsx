@@ -1,7 +1,7 @@
 import { getTodos } from '../lib/dataService';
 import TodoList from '../components/TodoList';
 import AuthButtons from '../components/AuthButtons';
-import { Todo } from '../../types';
+ // import { Todo } from '../../types';
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/authOptions";

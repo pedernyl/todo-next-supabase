@@ -54,7 +54,8 @@ export async function createTodo(title: string, description: string, parent_todo
   );
   if (!userIdRes.ok) throw new Error("Could not fetch user id");
   const { userId } = await userIdRes.json();
-  const insertObj: any = { title, description, owner_id: userId, completed: false };
+  if (typeof userId !== 'number') throw new Error('userId must be a number');
+  const insertObj: Partial<Todo> = { title, description, owner_id: userId, completed: false };
   if (parent_todo) insertObj.parent_todo = parent_todo;
   const { data, error } = await supabase
     .from('todos')
