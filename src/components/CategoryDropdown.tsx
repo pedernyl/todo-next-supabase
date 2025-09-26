@@ -42,6 +42,20 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       </select>
       {selectedCategory === "__create__" && (
         <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow p-2 z-20">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="text-gray-400 hover:text-gray-700 text-xl font-bold mb-1"
+              aria-label="Close"
+              onClick={() => {
+                setNewCategory("");
+                setNewDescription("");
+                onCategorySelect("");
+              }}
+            >
+              &times;
+            </button>
+          </div>
           <input
             type="text"
             className="w-full px-2 py-1 border rounded mb-2 text-sm"
