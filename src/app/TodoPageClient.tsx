@@ -13,6 +13,8 @@ export default function TodoPageClient({ initialTodos }: { initialTodos: Todo[] 
   const { userId } = useUserId();
 
   useEffect(() => {
+    console.log('TodoPageClient userId:', userId);
+    console.log('TodoPageClient selectedCategory:', selectedCategory);
     if (!userId) return;
     let url = "/api/todos";
     if (selectedCategory && selectedCategory.id) {
@@ -29,7 +31,7 @@ export default function TodoPageClient({ initialTodos }: { initialTodos: Todo[] 
       <div className="absolute right-10 top-2 z-10">
         <CategoryDropdownWrapper onCategoryChange={setSelectedCategory} />
       </div>
-      <TodoList initialTodos={todos} />
+      <TodoList initialTodos={todos} selectedCategory={selectedCategory} />
     </>
   );
 }

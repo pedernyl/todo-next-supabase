@@ -25,9 +25,9 @@ export async function POST(req: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { title, description, parent_todo } = await req.json();
+  const { title, description, parent_todo, category_id } = await req.json();
 
-  const todo = await createTodo(title, description, parent_todo);
+  const todo = await createTodo(title, description, parent_todo, category_id);
 
   return NextResponse.json(todo);
 }
