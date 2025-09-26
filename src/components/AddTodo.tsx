@@ -9,9 +9,10 @@ interface AddTodoProps {
   onTodoUpdated?: (todo: Todo) => void;
   parentTodo?: Todo | null;
   userId: number | null;
+  categoryId?: string;
 }
 
-export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTodo, userId }: AddTodoProps) {
+export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTodo, userId, categoryId }: AddTodoProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -28,6 +29,7 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('AddTodo categoryId:', categoryId);
     if (editTodo && editTodo.id) {
       // Update existing todo
       const res = await fetch('/api/todos', {
@@ -47,7 +49,13 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
       const res = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, parent_todo: parentTodo?.id, owner_id: userId }),
+        body: JSON.stringify({
+          title,
+          description,
+          parent_todo: parentTodo?.id,
+          owner_id: userId,
+          ...(categoryId ? { category_id: categoryId } : {})
+        }),
       });
       if (!res.ok) return;
       const newTodo: Todo = await res.json();

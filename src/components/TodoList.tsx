@@ -10,8 +10,12 @@ import { useUserId } from "../context/UserIdContext";
 import { Todo } from "../../types";
 import AddTodo from "./AddTodo";
 
+
+import type { Category } from "../lib/categoryService";
+
 interface TodoListProps {
   initialTodos: Todo[];
+  selectedCategory?: Category | null;
 }
 
 // Build tree structure from flat todo array
@@ -131,7 +135,7 @@ function renderTodoTree(
   ));
 }
 
-export default function TodoList({ initialTodos }: TodoListProps) {
+export default function TodoList({ initialTodos, selectedCategory }: TodoListProps) {
   const { userId } = useUserId();
 
   // Soft delete a todo
@@ -182,7 +186,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   const handleTodoAdded = (newTodo: Todo) => {
-    setTodos((prev) => [newTodo, ...prev]);
+    setTodos((prev: Todo[]) => [newTodo, ...prev]);
     setEditTodo(null);
     setParentTodo(null);
     setShowAddForm(false);
@@ -214,8 +218,8 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       }
 
       const updatedTodo = await response.json();
-      setTodos((prev) => {
-        return prev.map((t) => (t.id === id ? updatedTodo : t));
+      setTodos((prev: Todo[]) => {
+        return prev.map((t: Todo) => (t.id === id ? updatedTodo : t));
       });
     } catch (error) {
       console.error("Failed to update todo via API route:", error);
@@ -258,6 +262,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
           editTodo={editTodo}
           parentTodo={parentTodo}
           userId={userId}
+          categoryId={selectedCategory?.id}
           onTodoUpdated={async () => {
             await fetchTodos(showCompleted);
             setEditTodo(null);
