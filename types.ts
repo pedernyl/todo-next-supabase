@@ -5,6 +5,7 @@ export interface Todo {
   description: string;
   completed: boolean;
   owner_id: number;
+  category_id?: string | null;
   parent_todo?: string | null;
   deleted_timestamp?: number | null;
   deleted_by?: number | null;

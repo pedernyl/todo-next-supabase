@@ -16,7 +16,7 @@ export async function updateTodoDetails(id: string, title: string, description: 
 }
 
 // Fetch all todos from Supabase
-export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
+export async function getTodos(showCompleted: boolean = true, category_id?: string | null): Promise<Todo[]> {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("User not authenticated");
   // Fetch user id from /api/userid
@@ -27,6 +27,7 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
   if (!userIdRes.ok) throw new Error("Could not fetch user id");
   const { userId } = await userIdRes.json();
 
+
   let query = supabase
     .from('todos')
     .select('*')
@@ -36,6 +37,9 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
 
   if (!showCompleted) {
     query = query.eq('completed', false);
+  }
+  if (category_id) {
+    query = query.eq('category_id', category_id);
   }
 
   const { data, error } = await query;
