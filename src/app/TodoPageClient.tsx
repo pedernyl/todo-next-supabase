@@ -13,8 +13,6 @@ export default function TodoPageClient({ initialTodos }: { initialTodos: Todo[] 
   const { userId } = useUserId();
 
   useEffect(() => {
-    console.log('TodoPageClient userId:', userId);
-    console.log('TodoPageClient selectedCategory:', selectedCategory);
     if (!userId) return;
     let url = "/api/todos";
     if (selectedCategory && selectedCategory.id) {
