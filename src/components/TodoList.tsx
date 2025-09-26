@@ -159,6 +159,11 @@ export default function TodoList({ initialTodos, selectedCategory }: TodoListPro
 
   const [todos, setTodos] = React.useState(initialTodos);
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
+  // Filter todos by selectedCategory if set
+  const filteredTodos = selectedCategory && selectedCategory.id
+    ? todos.filter(todo => String(todo.category_id) === String(selectedCategory.id))
+    : todos;
+
   const [showCompleted, setShowCompleted] = React.useState(true);
   const [showAddForm, setShowAddForm] = React.useState(false);
   const [editTodo, setEditTodo] = React.useState<Todo | null>(null);
@@ -275,7 +280,7 @@ export default function TodoList({ initialTodos, selectedCategory }: TodoListPro
       {/* Nested Todo list with indented sub-todos */}
       <ul className="space-y-2">
         {renderTodoTree(
-          buildTodoTree([...todos]),
+          buildTodoTree([...filteredTodos]),
           0,
           toggleDescription,
           openDescriptions,
