@@ -14,14 +14,12 @@ const CategoryDropdownWrapper: React.FC<CategoryDropdownWrapperProps> = ({ onCat
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
-    console.log('CategoryDropdownWrapper userId:', userId);
     if (userId) {
       getCategories(userId).then(setCategories).catch(() => setCategories([]));
     }
   }, [userId]);
 
   const handleCategorySelect = (categoryId: string) => {
-    console.log('CategoryDropdownWrapper handleCategorySelect:', categoryId);
     if (categoryId === "__create__") {
       setSelectedCategory("__create__");
     } else {
