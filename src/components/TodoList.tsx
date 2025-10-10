@@ -10,8 +10,12 @@ import { useUserId } from "../context/UserIdContext";
 import { Todo } from "../../types";
 import AddTodo from "./AddTodo";
 
+
+import type { Category } from "../lib/categoryService";
+
 interface TodoListProps {
   initialTodos: Todo[];
+  selectedCategory?: Category | null;
 }
 
 // Build tree structure from flat todo array
@@ -131,7 +135,7 @@ function renderTodoTree(
   ));
 }
 
-export default function TodoList({ initialTodos }: TodoListProps) {
+export default function TodoList({ initialTodos, selectedCategory }: TodoListProps) {
   const { userId } = useUserId();
 
   // Soft delete a todo
@@ -155,6 +159,11 @@ export default function TodoList({ initialTodos }: TodoListProps) {
 
   const [todos, setTodos] = React.useState(initialTodos);
   const [openDescriptions, setOpenDescriptions] = React.useState<{ [id: string]: boolean }>({});
+  // Filter todos by selectedCategory if set
+  const filteredTodos = selectedCategory && selectedCategory.id
+    ? todos.filter(todo => String(todo.category_id) === String(selectedCategory.id))
+    : todos;
+
   const [showCompleted, setShowCompleted] = React.useState(true);
   const [showAddForm, setShowAddForm] = React.useState(false);
   const [editTodo, setEditTodo] = React.useState<Todo | null>(null);
@@ -182,7 +191,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   const handleTodoAdded = (newTodo: Todo) => {
-    setTodos((prev) => [newTodo, ...prev]);
+    setTodos((prev: Todo[]) => [newTodo, ...prev]);
     setEditTodo(null);
     setParentTodo(null);
     setShowAddForm(false);
@@ -214,8 +223,8 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       }
 
       const updatedTodo = await response.json();
-      setTodos((prev) => {
-        return prev.map((t) => (t.id === id ? updatedTodo : t));
+      setTodos((prev: Todo[]) => {
+        return prev.map((t: Todo) => (t.id === id ? updatedTodo : t));
       });
     } catch (error) {
       console.error("Failed to update todo via API route:", error);
@@ -258,6 +267,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
           editTodo={editTodo}
           parentTodo={parentTodo}
           userId={userId}
+          categoryId={selectedCategory?.id}
           onTodoUpdated={async () => {
             await fetchTodos(showCompleted);
             setEditTodo(null);
@@ -270,7 +280,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
       {/* Nested Todo list with indented sub-todos */}
       <ul className="space-y-2">
         {renderTodoTree(
-          buildTodoTree([...todos]),
+          buildTodoTree([...filteredTodos]),
           0,
           toggleDescription,
           openDescriptions,
