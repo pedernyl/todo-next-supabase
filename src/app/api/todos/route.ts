@@ -6,11 +6,12 @@ export async function GET(req: NextRequest) {
   }
   const url = new URL(req.url);
   const showCompleted = url.searchParams.get('showCompleted');
+  const category_id = url.searchParams.get('category_id');
   // Default to true if not provided
   const showCompletedBool = showCompleted === null ? true : showCompleted === 'true';
   // Import getTodos dynamically to avoid circular imports
   const { getTodos } = await import('../../../lib/dataService');
-  const todos = await getTodos(showCompletedBool);
+  const todos = await getTodos(showCompletedBool, category_id);
   return NextResponse.json(todos);
 }
 import { NextRequest, NextResponse } from 'next/server';
@@ -24,9 +25,9 @@ export async function POST(req: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { title, description, parent_todo } = await req.json();
+  const { title, description, parent_todo, category_id } = await req.json();
 
-  const todo = await createTodo(title, description, parent_todo);
+  const todo = await createTodo(title, description, parent_todo, category_id);
 
   return NextResponse.json(todo);
 }

@@ -16,7 +16,7 @@ export async function updateTodoDetails(id: string, title: string, description: 
 }
 
 // Fetch all todos from Supabase
-export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
+export async function getTodos(showCompleted: boolean = true, category_id?: string | null): Promise<Todo[]> {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("User not authenticated");
   // Fetch user id from /api/userid
@@ -26,6 +26,7 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
   );
   if (!userIdRes.ok) throw new Error("Could not fetch user id");
   const { userId } = await userIdRes.json();
+
 
   let query = supabase
     .from('todos')
@@ -37,6 +38,9 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
   if (!showCompleted) {
     query = query.eq('completed', false);
   }
+  if (category_id) {
+    query = query.eq('category_id', category_id);
+  }
 
   const { data, error } = await query;
   if (error) throw error;
@@ -44,7 +48,7 @@ export async function getTodos(showCompleted: boolean = true): Promise<Todo[]> {
 }
 
 // Create a new todo in Supabase
-export async function createTodo(title: string, description: string, parent_todo?: string): Promise<Todo> {
+export async function createTodo(title: string, description: string, parent_todo?: string, category_id?: string): Promise<Todo> {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("User not authenticated");
   // Fetch user id from /api/userid
@@ -57,6 +61,7 @@ export async function createTodo(title: string, description: string, parent_todo
   if (typeof userId !== 'number') throw new Error('userId must be a number');
   const insertObj: Partial<Todo> = { title, description, owner_id: userId, completed: false };
   if (parent_todo) insertObj.parent_todo = parent_todo;
+  if (category_id) insertObj.category_id = category_id;
   const { data, error } = await supabase
     .from('todos')
     .insert([insertObj])
