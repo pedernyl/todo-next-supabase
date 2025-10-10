@@ -1,16 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCategory } from '../lib/categoryService';
-
+// Mock supabaseClient with full method chains (must be first)
+import { vi } from 'vitest';
 vi.mock('../lib/supabaseClient', () => {
   const insertChain = { select: () => ({ single: () => Promise.resolve({ data: { id: 'cat1', title: 'Test Category', owner_id: 1 }, error: null }) }) };
   return {
     supabase: {
-      from: (table) => ({
+      from: (_table: any) => ({
         insert: () => insertChain,
       })
     }
   };
 });
+
+import { createCategory } from '../lib/categoryService';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Category API', () => {
   beforeEach(() => {
