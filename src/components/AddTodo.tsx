@@ -95,7 +95,7 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
         type="submit"
         className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition"
       >
-        Add Todo
+        Save Todo
       </button>
     </form>
   );

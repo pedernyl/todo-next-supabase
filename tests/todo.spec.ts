@@ -17,8 +17,8 @@ test.describe('Todo App E2E', () => {
     // Fill in the title and description
     await page.fill('input[name="title"]', 'Playwright Todo');
     await page.fill('textarea[name="description"]', 'Created by Playwright');
-    // Submit the form
-    await page.click('button:has-text("Add Todo")');
+  // Submit the form
+  await page.click('button:has-text("Save Todo")');
     // Check that the new todo appears in the list
     await expect(page.locator('text=Playwright Todo')).toBeVisible();
   });
