@@ -17,22 +17,36 @@ test.describe('Todo App E2E', () => {
     // Fill in the title and description
     await page.fill('input[name="title"]', 'Playwright Todo');
     await page.fill('textarea[name="description"]', 'Created by Playwright');
-  // Submit the form
-  await page.click('button:has-text("Save Todo")');
+    // Submit the form
+  await page.waitForSelector('form button[type="submit"]');
+  await page.click('form button[type="submit"]');
     // Check that the new todo appears in the list
     await expect(page.locator('text=Playwright Todo')).toBeVisible();
   });
 
   // test('should delete a todo', async ({ page }) => {
   //   await page.goto(BASE_URL);
-  //   // Find the todo by text and click its delete button (adjust selector as needed)
-  //   const todo = page.locator('text=Playwright Todo');
-  //   await expect(todo).toBeVisible();
-  //   // Click the delete button (adjust selector to match your UI)
-  //   await todo.locator('button[aria-label="Delete"]').click();
-  //   // Confirm deletion if prompted
-  //   // await page.click('button:has-text("Confirm")'); // Uncomment if you have a confirm dialog
-  //   // Check that the todo is gone
-  //   await expect(page.locator('text=Playwright Todo')).not.toBeVisible();
+  //   await page.pause(); // Pause for interactive debugging
+  //   // Find the todo container <li> by its text
+  // const todoItem = page.locator('li:has-text("Playwright Todo")').first();
+  // await expect(todoItem).toBeVisible();
+  // // Click 'Show Description' within this todo
+  // await todoItem.getByText('Show Description').click();
+  // // Wait for animation/expansion
+  // await page.waitForTimeout(300);
+  // // Click the 'Delete' link within the expanded description
+  // const deleteLink = todoItem.locator('a', { hasText: 'Delete' });
+  // console.log('Delete link locator:', await deleteLink.evaluateAll(el => el.map(e => e.outerHTML)));
+  // await expect(deleteLink).toBeVisible();
+  // await deleteLink.scrollIntoViewIfNeeded();
+  // await expect(deleteLink).toBeEnabled();
+  // await page.pause(); // Pause for interactive debugging
+  // await deleteLink.click({ force: true });
+  //   await page.waitForTimeout(300);
+  //
+  // // Confirm deletion dialog
+  // await page.click('button:has-text("OK")');
+  // // Wait for the todo to be removed
+  // await expect(todoItem).not.toBeVisible();
   // });
 });
