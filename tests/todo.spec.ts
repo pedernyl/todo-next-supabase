@@ -24,29 +24,18 @@ test.describe('Todo App E2E', () => {
     await expect(page.locator('text=Playwright Todo')).toBeVisible();
   });
 
-  // test('should delete a todo', async ({ page }) => {
-  //   await page.goto(BASE_URL);
-  //   await page.pause(); // Pause for interactive debugging
-  //   // Find the todo container <li> by its text
-  // const todoItem = page.locator('li:has-text("Playwright Todo")').first();
-  // await expect(todoItem).toBeVisible();
-  // // Click 'Show Description' within this todo
-  // await todoItem.getByText('Show Description').click();
-  // // Wait for animation/expansion
-  // await page.waitForTimeout(300);
-  // // Click the 'Delete' link within the expanded description
-  // const deleteLink = todoItem.locator('a', { hasText: 'Delete' });
-  // console.log('Delete link locator:', await deleteLink.evaluateAll(el => el.map(e => e.outerHTML)));
-  // await expect(deleteLink).toBeVisible();
-  // await deleteLink.scrollIntoViewIfNeeded();
-  // await expect(deleteLink).toBeEnabled();
-  // await page.pause(); // Pause for interactive debugging
-  // await deleteLink.click({ force: true });
-  //   await page.waitForTimeout(300);
-  //
-  // // Confirm deletion dialog
-  // await page.click('button:has-text("OK")');
-  // // Wait for the todo to be removed
-  // await expect(todoItem).not.toBeVisible();
-  // });
+   test('should complete a todo', async ({ page }) => {
+     await page.goto(BASE_URL);
+     const todoItem = page.locator('li:has-text("Playwright Todo")').first();
+     await expect(todoItem).toBeVisible();
+     // Click 'Show Description' within this todo
+     await todoItem.getByText('Show Description').click();
+     await page.waitForTimeout(300);
+     // Click the Complete button
+     await todoItem.getByRole('button', { name: /complete/i }).click();
+     await page.waitForTimeout(300);
+     // Check that the todo is now marked as completed (line-through style)
+     const title = todoItem.locator('span');
+     await expect(title).toHaveClass(/line-through/);
+   });
 });
