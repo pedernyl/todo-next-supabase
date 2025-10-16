@@ -1,6 +1,19 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { createTodo, softDeleteTodo } from '../lib/dataService';
+
+// Mock supabaseClient with full method chains (must be first)
+vi.mock('../lib/supabaseClient', () => {
+  const insertChain = { select: () => ({ single: () => Promise.resolve({ data: { id: '1', title: 'Test Todo', description: '', completed: false }, error: null }) }) };
+  const updateChain = { eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: { id: '1', deleted_timestamp: 1234567890, deleted_by: 'user1' }, error: null }) }) }) };
+  return {
+    supabase: {
+      from: (_table: any) => ({
+        insert: () => insertChain,
+        update: () => updateChain,
+      })
+    }
+  };
+});
 
 // Mock next-auth getServerSession
 vi.mock('next-auth', () => ({
@@ -8,6 +21,7 @@ vi.mock('next-auth', () => ({
 }));
 
 // Mock fetch for user id
+// @ts-ignore
 global.fetch = vi.fn(async (url) => {
   if (url.toString().includes('/api/userid')) {
     return {
@@ -16,20 +30,6 @@ global.fetch = vi.fn(async (url) => {
     } as any;
   }
   throw new Error('Unknown fetch');
-});
-
-// Mock supabaseClient with full method chains
-vi.mock('../lib/supabaseClient', () => {
-  const insertChain = { select: () => ({ single: () => Promise.resolve({ data: { id: '1', title: 'Test Todo', description: '', completed: false }, error: null }) }) };
-  const updateChain = { eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: { id: '1', deleted_timestamp: 1234567890, deleted_by: 'user1' }, error: null }) }) }) };
-  return {
-    supabase: {
-      from: (table) => ({
-        insert: () => insertChain,
-        update: () => updateChain,
-      })
-    }
-  };
 });
 
 describe('Todo API', () => {

@@ -80,12 +80,14 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
         placeholder="Title"
         value={title}
         onChange={e => setTitle(e.target.value)}
+        name='title'
         required
         className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <textarea
         placeholder="Description"
         value={description}
+        name='description'
         onChange={e => setDescription(e.target.value)}
         className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[80px]"
       />
@@ -93,7 +95,7 @@ export default function AddTodo({ onTodoAdded, editTodo, onTodoUpdated, parentTo
         type="submit"
         className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition"
       >
-        Add Todo
+        Save Todo
       </button>
     </form>
   );
