@@ -4,7 +4,8 @@ vi.mock('../lib/supabaseClient', () => {
   const insertChain = { select: () => ({ single: () => Promise.resolve({ data: { id: 'cat1', title: 'Test Category', owner_id: 1 }, error: null }) }) };
   return {
     supabase: {
-      from: (_table: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      from: (_table: unknown) => ({
         insert: () => insertChain,
       })
     }
