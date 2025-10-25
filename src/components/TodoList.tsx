@@ -1,11 +1,9 @@
+"use client";
+import React from "react";
 // Type for tree node used in buildTodoTree and renderTodoTree
 interface TodoTreeNode extends Todo {
   children: TodoTreeNode[];
 }
-
-
-"use client";
-import React from "react";
 import { useUserId } from "../context/UserIdContext";
 import { Todo } from "../../types";
 import AddTodo from "./AddTodo";
