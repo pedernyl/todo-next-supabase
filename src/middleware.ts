@@ -43,7 +43,11 @@ function buildCsp(mode: string, nonce: string) {
 }
 
 export function middleware(_request: NextRequest) {
-  const mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
+  let mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
+  // In development, default to permissive 'dev' mode unless explicitly enforcing
+  if (process.env.NODE_ENV === 'development' && mode !== 'enforce') {
+    mode = 'dev';
+  }
   // generate a short random nonce (base64) using Web Crypto (Edge runtime)
   let nonce = '';
   try {
@@ -75,5 +79,6 @@ export function middleware(_request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/((?!_next/static|_next/image|favicon.ico).*)',
+  // Skip all Next.js internal routes entirely to avoid impacting HMR/dev overlay
+  matcher: '/((?!_next/|favicon.ico).*)',
 };
