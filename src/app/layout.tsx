@@ -1,18 +1,20 @@
-"use client";
-
-
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
+import Providers from './providers';
 import type { ReactNode } from "react";
-import { UserIdProvider } from "../context/UserIdContext";
+import { cookies } from 'next/headers';
+import { CspNonceProvider } from '../context/CspNonceContext';
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const cookieStore = await cookies();
+  // cookies() returns a ReadonlyRequestCookies; use get when available
+  const nonce = typeof cookieStore.get === 'function' ? cookieStore.get('csp-nonce')?.value || null : null;
+
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          <UserIdProvider>{children}</UserIdProvider>
-        </SessionProvider>
+        <Providers>
+          <CspNonceProvider nonce={nonce}>{children}</CspNonceProvider>
+        </Providers>
       </body>
     </html>
   );
