@@ -1,11 +1,9 @@
+"use client";
+import React from "react";
 // Type for tree node used in buildTodoTree and renderTodoTree
 interface TodoTreeNode extends Todo {
   children: TodoTreeNode[];
 }
-
-
-"use client";
-import React from "react";
 import { useUserId } from "../context/UserIdContext";
 import { Todo } from "../../types";
 import AddTodo from "./AddTodo";
@@ -58,8 +56,9 @@ function renderTodoTree(
   return tree.map((todo: TodoTreeNode) => (
     <li
       key={todo.id}
-      className={`flex flex-col gap-2 p-4 bg-white rounded-xl shadow hover:shadow-md transition`}
-      style={{ marginLeft: `${level * 32}px` }}
+      className={`flex flex-col gap-2 p-4 bg-white rounded-xl shadow hover:shadow-md transition ${getIndentClass(
+        level
+      )}`}
     >
       <div className="flex items-center justify-between">
         <span className={todo.completed ? "line-through text-gray-400" : ""}>
@@ -133,6 +132,26 @@ function renderTodoTree(
       )}
     </li>
   ));
+}
+
+// Map nesting level to Tailwind margin-left classes (32px per level)
+function getIndentClass(level: number): string {
+  // Tailwind spacing scale: 8 = 2rem = 32px (base 16px)
+  const map = [
+    'ml-0',
+    'ml-8',
+    'ml-16',
+    'ml-24',
+    'ml-32',
+    'ml-40',
+    'ml-48',
+    'ml-56',
+    'ml-64',
+    'ml-72',
+    'ml-80',
+  ];
+  const idx = Math.max(0, Math.min(level, map.length - 1));
+  return map[idx];
 }
 
 export default function TodoList({ initialTodos, selectedCategory }: TodoListProps) {

@@ -14,7 +14,6 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   onCreateCategory,
   selectedCategory,
 }) => {
-  const [showInput, setShowInput] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
@@ -23,7 +22,6 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       onCreateCategory(newCategory.trim(), newDescription.trim());
       setNewCategory("");
       setNewDescription("");
-      setShowInput(false);
     }
   };
 
