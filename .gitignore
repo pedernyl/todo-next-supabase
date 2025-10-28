@@ -45,3 +45,5 @@ next-env.d.ts
 
 # custom
 .callback_url
+zap_report.html
+zap.yaml
