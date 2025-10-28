@@ -42,7 +42,9 @@ function buildCsp(mode: string, nonce: string) {
   return '';
 }
 
-export function middleware(_request: NextRequest) {
+export function middleware(request: NextRequest) {
+  // Mark request as intentionally unused to satisfy linting rules.
+  void request;
   let mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
   // In development, default to permissive 'dev' mode unless explicitly enforcing
   if (process.env.NODE_ENV === 'development' && mode !== 'enforce') {
@@ -56,7 +58,7 @@ export function middleware(_request: NextRequest) {
     for (let i = 0; i < arr.length; i++) binary += String.fromCharCode(arr[i]);
     // btoa should be available in Edge runtime
     nonce = typeof btoa === 'function' ? btoa(binary) : '';
-  } catch (e) {
+  } catch {
     // fallback: empty nonce
     nonce = '';
   }
