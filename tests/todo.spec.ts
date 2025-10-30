@@ -1,9 +1,6 @@
-
 import { test, expect } from '@playwright/test';
-
 // Use authentication state for all tests in this file
 test.use({ storageState: 'storageState.json' });
-
 // Adjust the URL if your dev server runs on a different port
 const BASE_URL = 'http://localhost:3000';
 

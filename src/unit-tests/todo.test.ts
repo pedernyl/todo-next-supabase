@@ -7,8 +7,7 @@ vi.mock('../lib/supabaseClient', () => {
   const updateChain = { eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: { id: '1', deleted_timestamp: 1234567890, deleted_by: 'user1' }, error: null }) }) }) };
   return {
     supabase: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      from: (_table: unknown) => ({
+      from: (_table: any) => ({
         insert: () => insertChain,
         update: () => updateChain,
       })
@@ -21,20 +20,17 @@ vi.mock('next-auth', () => ({
   getServerSession: async () => ({ user: { email: 'test@example.com' } })
 }));
 
-// Mock fetch for user id with a typed mock
-const fetchMock = vi.fn(async (url: RequestInfo) => {
+// Mock fetch for user id
+// @ts-ignore
+global.fetch = vi.fn(async (url) => {
   if (url.toString().includes('/api/userid')) {
-    const resp = {
+    return {
       ok: true,
       json: async () => ({ userId: 1 })
-    } as unknown as Response;
-    return resp;
+    } as any;
   }
   throw new Error('Unknown fetch');
 });
-// Assign the typed mock to global.fetch for the test environment
-// @ts-expect-error - test runtime injection
-(global as unknown as { fetch: typeof fetch }) .fetch = fetchMock as unknown as typeof fetch;
 
 describe('Todo API', () => {
   beforeEach(() => {
