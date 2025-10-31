@@ -47,3 +47,4 @@ next-env.d.ts
 .callback_url
 zap_report.html
 zap.yaml
+docs/
