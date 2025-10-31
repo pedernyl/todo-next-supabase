@@ -13,132 +13,128 @@
       - option "+ Create new category"
     - generic [ref=e11]:
       - button "Hide completed" [ref=e13]
-      - button "Hide Add Todo" [active] [ref=e15]
-      - generic [ref=e16]:
-        - textbox "Title" [ref=e17]
-        - textbox "Description" [ref=e18]
-        - button "Add Todo" [ref=e19]
-      - list [ref=e20]:
-        - listitem [ref=e21]:
-          - generic [ref=e22]:
-            - generic [ref=e23]: delete category
-            - link "Show Description" [ref=e25] [cursor=pointer]:
+      - button "Add Todo" [active] [ref=e15]
+      - list [ref=e16]:
+        - listitem [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]: delete category
+            - link "Show Description" [ref=e21] [cursor=pointer]:
               - /url: "#"
-        - listitem [ref=e26]:
-          - generic [ref=e27]:
-            - generic [ref=e28]: deploy to vercel
-            - link "Show Description" [ref=e30] [cursor=pointer]:
+        - listitem [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]: deploy to vercel
+            - link "Show Description" [ref=e26] [cursor=pointer]:
               - /url: "#"
-          - list [ref=e31]:
-            - listitem [ref=e32]:
-              - generic [ref=e33]:
-                - generic [ref=e34]: app tests
-                - link "Show Description" [ref=e36] [cursor=pointer]:
+          - list [ref=e27]:
+            - listitem [ref=e28]:
+              - generic [ref=e29]:
+                - generic [ref=e30]: app tests
+                - link "Show Description" [ref=e32] [cursor=pointer]:
                   - /url: "#"
-              - list [ref=e37]:
-                - listitem [ref=e38]:
-                  - generic [ref=e39]:
-                    - generic [ref=e40]: Integrations- & end-to-end tester
-                    - link "Show Description" [ref=e42] [cursor=pointer]:
+              - list [ref=e33]:
+                - listitem [ref=e34]:
+                  - generic [ref=e35]:
+                    - generic [ref=e36]: Integrations- & end-to-end tester
+                    - link "Show Description" [ref=e38] [cursor=pointer]:
                       - /url: "#"
-                  - list [ref=e43]:
-                    - listitem [ref=e44]:
-                      - generic [ref=e45]:
-                        - generic [ref=e46]: let copilot create some tests
-                        - link "Show Description" [ref=e48] [cursor=pointer]:
+                  - list [ref=e39]:
+                    - listitem [ref=e40]:
+                      - generic [ref=e41]:
+                        - generic [ref=e42]: let copilot create some tests
+                        - link "Show Description" [ref=e44] [cursor=pointer]:
                           - /url: "#"
-                    - listitem [ref=e49]:
-                      - generic [ref=e50]:
-                        - generic [ref=e51]: install playwright
-                        - link "Show Description" [ref=e53] [cursor=pointer]:
+                    - listitem [ref=e45]:
+                      - generic [ref=e46]:
+                        - generic [ref=e47]: install playwright
+                        - link "Show Description" [ref=e49] [cursor=pointer]:
                           - /url: "#"
-                - listitem [ref=e54]:
-                  - generic [ref=e55]:
-                    - generic [ref=e56]: let copilot write some tests
-                    - link "Show Description" [ref=e58] [cursor=pointer]:
+                - listitem [ref=e50]:
+                  - generic [ref=e51]:
+                    - generic [ref=e52]: let copilot write some tests
+                    - link "Show Description" [ref=e54] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e59]:
-                  - generic [ref=e60]:
-                    - generic [ref=e61]: Installera Jest (eller Vitest)
-                    - link "Show Description" [ref=e63] [cursor=pointer]:
+                - listitem [ref=e55]:
+                  - generic [ref=e56]:
+                    - generic [ref=e57]: Installera Jest (eller Vitest)
+                    - link "Show Description" [ref=e59] [cursor=pointer]:
                       - /url: "#"
-            - listitem [ref=e64]:
-              - generic [ref=e65]:
-                - generic [ref=e66]: security tests
-                - link "Show Description" [ref=e68] [cursor=pointer]:
+            - listitem [ref=e60]:
+              - generic [ref=e61]:
+                - generic [ref=e62]: security tests
+                - link "Show Description" [ref=e64] [cursor=pointer]:
                   - /url: "#"
-              - list [ref=e69]:
-                - listitem [ref=e70]:
-                  - generic [ref=e71]:
-                    - generic [ref=e72]: Testa med säkerhetsverktyg
-                    - link "Show Description" [ref=e74] [cursor=pointer]:
+              - list [ref=e65]:
+                - listitem [ref=e66]:
+                  - generic [ref=e67]:
+                    - generic [ref=e68]: Testa med säkerhetsverktyg
+                    - link "Show Description" [ref=e70] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e75]:
-                  - generic [ref=e76]:
-                    - generic [ref=e77]: Skydda API-routes
-                    - link "Show Description" [ref=e79] [cursor=pointer]:
+                - listitem [ref=e71]:
+                  - generic [ref=e72]:
+                    - generic [ref=e73]: Skydda API-routes
+                    - link "Show Description" [ref=e75] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e80]:
-                  - generic [ref=e81]:
-                    - generic [ref=e82]: Uppdatera beroenden & kontrollera sårbarheter
-                    - link "Show Description" [ref=e84] [cursor=pointer]:
+                - listitem [ref=e76]:
+                  - generic [ref=e77]:
+                    - generic [ref=e78]: Uppdatera beroenden & kontrollera sårbarheter
+                    - link "Show Description" [ref=e80] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e85]:
-                  - generic [ref=e86]:
-                    - generic [ref=e87]: csp
-                    - link "Show Description" [ref=e89] [cursor=pointer]:
+                - listitem [ref=e81]:
+                  - generic [ref=e82]:
+                    - generic [ref=e83]: csp
+                    - link "Show Description" [ref=e85] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e90]:
-                  - generic [ref=e91]:
-                    - generic [ref=e92]: sanitaze user input
-                    - link "Show Description" [ref=e94] [cursor=pointer]:
+                - listitem [ref=e86]:
+                  - generic [ref=e87]:
+                    - generic [ref=e88]: sanitaze user input
+                    - link "Show Description" [ref=e90] [cursor=pointer]:
                       - /url: "#"
-                - listitem [ref=e95]:
-                  - generic [ref=e96]:
-                    - generic [ref=e97]: login/logout
-                    - link "Show Description" [ref=e99] [cursor=pointer]:
+                - listitem [ref=e91]:
+                  - generic [ref=e92]:
+                    - generic [ref=e93]: login/logout
+                    - link "Show Description" [ref=e95] [cursor=pointer]:
                       - /url: "#"
-            - listitem [ref=e100]:
-              - generic [ref=e101]:
-                - generic [ref=e102]: åtkomstkontroll
-                - link "Show Description" [ref=e104] [cursor=pointer]:
+            - listitem [ref=e96]:
+              - generic [ref=e97]:
+                - generic [ref=e98]: åtkomstkontroll
+                - link "Show Description" [ref=e100] [cursor=pointer]:
                   - /url: "#"
-            - listitem [ref=e105]:
-              - generic [ref=e106]:
-                - generic [ref=e107]: check api keys
-                - link "Show Description" [ref=e109] [cursor=pointer]:
+            - listitem [ref=e101]:
+              - generic [ref=e102]:
+                - generic [ref=e103]: check api keys
+                - link "Show Description" [ref=e105] [cursor=pointer]:
                   - /url: "#"
-            - listitem [ref=e110]:
-              - generic [ref=e111]:
-                - generic [ref=e112]: test that the app can't be reached unathorized
-                - link "Show Description" [ref=e114] [cursor=pointer]:
+            - listitem [ref=e106]:
+              - generic [ref=e107]:
+                - generic [ref=e108]: test that the app can't be reached unathorized
+                - link "Show Description" [ref=e110] [cursor=pointer]:
                   - /url: "#"
-            - listitem [ref=e115]:
-              - generic [ref=e116]:
-                - generic [ref=e117]: test that user id is inserted to database
-                - link "Show Description" [ref=e119] [cursor=pointer]:
+            - listitem [ref=e111]:
+              - generic [ref=e112]:
+                - generic [ref=e113]: test that user id is inserted to database
+                - link "Show Description" [ref=e115] [cursor=pointer]:
                   - /url: "#"
-            - listitem [ref=e120]:
-              - generic [ref=e121]:
-                - generic [ref=e122]: npm run build
-                - link "Show Description" [ref=e124] [cursor=pointer]:
+            - listitem [ref=e116]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: npm run build
+                - link "Show Description" [ref=e120] [cursor=pointer]:
                   - /url: "#"
-        - listitem [ref=e125]:
-          - generic [ref=e126]:
-            - generic [ref=e127]: restricted text length
-            - link "Show Description" [ref=e129] [cursor=pointer]:
+        - listitem [ref=e121]:
+          - generic [ref=e122]:
+            - generic [ref=e123]: restricted text length
+            - link "Show Description" [ref=e125] [cursor=pointer]:
               - /url: "#"
-        - listitem [ref=e130]:
-          - generic [ref=e131]:
-            - generic [ref=e132]: kolla refundering helsenorge medisin
-            - link "Show Description" [ref=e134] [cursor=pointer]:
+        - listitem [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]: kolla refundering helsenorge medisin
+            - link "Show Description" [ref=e130] [cursor=pointer]:
               - /url: "#"
-        - listitem [ref=e135]:
-          - generic [ref=e136]:
-            - generic [ref=e137]: reseregning helsenorge
-            - link "Show Description" [ref=e139] [cursor=pointer]:
+        - listitem [ref=e131]:
+          - generic [ref=e132]:
+            - generic [ref=e133]: reseregning helsenorge
+            - link "Show Description" [ref=e135] [cursor=pointer]:
               - /url: "#"
-  - button "Open Next.js Dev Tools" [ref=e145] [cursor=pointer]:
-    - img [ref=e146]
-  - alert [ref=e149]
+  - button "Open Next.js Dev Tools" [ref=e141] [cursor=pointer]:
+    - img [ref=e142]
+  - alert [ref=e145]
 ```

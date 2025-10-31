@@ -48,3 +48,4 @@ next-env.d.ts
 zap_report.html
 zap.yaml
 docs/
+test-results/
