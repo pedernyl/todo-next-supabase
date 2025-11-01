@@ -73,8 +73,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Testing
 
-- Unit tests: `npm test` (Vitest)
-- E2E tests: `npm run test:e2e` (Playwright). See `tests/` folder.
+- Unit tests (Vitest): see [src/unit-tests/README.md](src/unit-tests/README.md) for commands and setup. Quick run: `npm test`.
+- E2E tests (Playwright): see [tests/README.md](tests/README.md) for auth setup and commands. CSP-specific notes: [tests/README-CSP.md](tests/README-CSP.md).
 
 ## Deploy
 

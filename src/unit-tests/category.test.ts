@@ -5,7 +5,7 @@ vi.mock('../lib/supabaseClient', () => {
   return {
     supabase: {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      from: (_table: any) => ({
+      from: (_table: string) => ({
         insert: () => insertChain,
       })
     }

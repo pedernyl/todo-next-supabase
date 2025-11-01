@@ -7,7 +7,8 @@ vi.mock('../lib/supabaseClient', () => {
   const updateChain = { eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: { id: '1', deleted_timestamp: 1234567890, deleted_by: 'user1' }, error: null }) }) }) };
   return {
     supabase: {
-      from: (_table: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      from: (_table: string) => ({
         insert: () => insertChain,
         update: () => updateChain,
       })
@@ -21,13 +22,14 @@ vi.mock('next-auth', () => ({
 }));
 
 // Mock fetch for user id
-// @ts-ignore
-global.fetch = vi.fn(async (url) => {
-  if (url.toString().includes('/api/userid')) {
+type SimpleResponse = { ok: boolean; json: () => Promise<{ userId: number }> };
+// @ts-expect-error - mocking global.fetch in the test environment
+global.fetch = vi.fn(async (url: unknown): Promise<SimpleResponse> => {
+  if (String(url).includes('/api/userid')) {
     return {
       ok: true,
       json: async () => ({ userId: 1 })
-    } as any;
+    };
   }
   throw new Error('Unknown fetch');
 });
