@@ -43,6 +43,8 @@ function buildCsp(mode: string, nonce: string) {
   const withNonce = CSP_BASE.replace("script-src 'self'", `script-src 'self'${nonceToken}`);
   if (mode === 'enforce') return withNonce.replace('report-uri /api/csp-report;', '');
   if (mode === 'report-only') return withNonce;
+  // Explicitly support turning CSP off
+  if (mode === 'off') return '';
   if (mode === 'dev') return "default-src 'self' http://localhost:3000; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob:; connect-src 'self' ws: wss: http://localhost:3000; font-src 'self' data:";
   return '';
 }
@@ -52,7 +54,7 @@ export function middleware(request: NextRequest) {
   void request;
   let mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
   // In development, default to permissive 'dev' mode unless explicitly enforcing
-  if (process.env.NODE_ENV === 'development' && mode !== 'enforce') {
+  if (process.env.NODE_ENV === 'development' && mode !== 'enforce' && mode !== 'off') {
     mode = 'dev';
   }
   // generate a short random nonce (base64) using Web Crypto (Edge runtime)
