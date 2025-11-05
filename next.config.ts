@@ -11,6 +11,10 @@ const CSP_DEV =
 const nextConfig: NextConfig = {
   async headers() {
     const mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
+    // When CSP is explicitly turned off, return no custom headers/routes
+    if (mode === 'off') {
+      return [];
+    }
     const headers: { key: string; value: string }[] = [];
 
     if (mode === 'enforce') {
