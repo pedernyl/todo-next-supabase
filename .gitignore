@@ -45,7 +45,9 @@ next-env.d.ts
 
 # custom
 .callback_url
-zap_report.html
-zap.yaml
+scripts/security/zap_report.html
+scripts/security/zap-report.html
+scripts/security/zap-results.json
+scripts/security/zap.yaml
 docs/
 test-results/
