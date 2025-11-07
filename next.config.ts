@@ -11,26 +11,30 @@ const CSP_DEV =
 const nextConfig: NextConfig = {
   async headers() {
     const mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
-    // When CSP is explicitly turned off, return no custom headers/routes
-    if (mode === 'off') {
-      return [];
-    }
-    const headers: { key: string; value: string }[] = [];
+    // Only emit a header in report-only mode; middleware handles dev/enforce. 'off' returns nothing.
+    if (mode !== 'report-only') return [];
 
-    if (mode === 'enforce') {
-      headers.push({ key: 'Content-Security-Policy', value: CSP_REPORT_ONLY.replace('report-uri /api/csp-report;', '') });
-    } else if (mode === 'report-only') {
-      headers.push({ key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY });
-    } else if (mode === 'dev') {
-      headers.push({ key: 'Content-Security-Policy', value: CSP_DEV });
+    // Dynamically include Supabase origins in connect-src for accurate reporting.
+    let value = CSP_REPORT_ONLY;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (supabaseUrl) {
+      try {
+        const u = new URL(supabaseUrl);
+        const httpsOrigin = `${u.protocol}//${u.host}`; // e.g. https://xyz.supabase.co
+        const wssOrigin = `wss://${u.host}`;
+        value = value.replace(
+          "connect-src 'self';",
+          `connect-src 'self' ${httpsOrigin} ${wssOrigin};`
+        );
+      } catch {
+        // ignore malformed URL
+      }
     }
 
-    return [
-      {
-        source: '/(.*)',
-        headers,
-      },
-    ];
+    return [{
+      source: '/(.*)',
+      headers: [{ key: 'Content-Security-Policy-Report-Only', value }],
+    }];
   },
 };
 
