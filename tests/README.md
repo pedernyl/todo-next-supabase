@@ -26,3 +26,4 @@ npx playwright test tests/*.spec.ts
 **Note:**
 - Do not commit `storageState.json` to version control (it is in `.gitignore`).
 - Only run the login script when you need to refresh your authentication state.
+- Remember to set csp to dev, off or report-only
