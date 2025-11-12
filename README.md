@@ -62,6 +62,16 @@ NEXT_CSP_MODE=enforce
 
 The policy automatically whitelists your Supabase project URL (https) and its realtime websocket endpoint (wss) based on `NEXT_PUBLIC_SUPABASE_URL`.
 
+## Security headers
+
+- X-Powered-By is disabled at the framework level to avoid disclosing implementation details.
+	- Config: `poweredByHeader: false` in `next.config.ts`
+	- Middleware also deletes any stray `x-powered-by` header as defense-in-depth.
+- Verify locally:
+	```bash
+	curl -s -D - http://localhost:3000/ -o /dev/null | grep -i x-powered-by || echo 'No X-Powered-By header'
+	```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

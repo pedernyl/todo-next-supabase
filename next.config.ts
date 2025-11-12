@@ -9,6 +9,8 @@ const CSP_DEV =
   "default-src 'self' http://localhost:3000; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob:; connect-src 'self' ws: wss: http://localhost:3000; font-src 'self' data:";
 
 const nextConfig: NextConfig = {
+  // Remove X-Powered-By header to avoid disclosing framework details
+  poweredByHeader: false,
   async headers() {
     const mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
     // Only emit a header in report-only mode; middleware handles dev/enforce. 'off' returns nothing.
