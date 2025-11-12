@@ -13,30 +13,45 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
     const mode = (process.env.NEXT_CSP_MODE || 'report-only').toLowerCase();
-    // Only emit a header in report-only mode; middleware handles dev/enforce. 'off' returns nothing.
-    if (mode !== 'report-only') return [];
 
-    // Dynamically include Supabase origins in connect-src for accurate reporting.
-    let value = CSP_REPORT_ONLY;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (supabaseUrl) {
-      try {
-        const u = new URL(supabaseUrl);
-        const httpsOrigin = `${u.protocol}//${u.host}`; // e.g. https://xyz.supabase.co
-        const wssOrigin = `wss://${u.host}`;
-        value = value.replace(
-          "connect-src 'self';",
-          `connect-src 'self' ${httpsOrigin} ${wssOrigin};`
-        );
-      } catch {
-        // ignore malformed URL
+    // Always apply general security headers from next.config.ts (to pages, API and static assets)
+    const securityHeaders: { key: string; value: string }[] = [
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
+    ];
+
+    // Base routes that always receive the general security headers
+    const routes: Array<{ source: string; headers: { key: string; value: string }[] }> = [
+      { source: '/_next/static/(.*)', headers: securityHeaders },
+      { source: '/favicon.ico', headers: securityHeaders },
+      { source: '/(.*)', headers: [...securityHeaders] },
+    ];
+
+    // Only emit CSP Report-Only here; enforced CSP is handled in middleware.
+    if (mode === 'report-only') {
+      // Dynamically include Supabase origins in connect-src for accurate reporting.
+      let value = CSP_REPORT_ONLY;
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (supabaseUrl) {
+        try {
+          const u = new URL(supabaseUrl);
+          const httpsOrigin = `${u.protocol}//${u.host}`; // e.g. https://xyz.supabase.co
+          const wssOrigin = `wss://${u.host}`;
+          value = value.replace(
+            "connect-src 'self';",
+            `connect-src 'self' ${httpsOrigin} ${wssOrigin};`
+          );
+        } catch {
+          // ignore malformed URL
+        }
       }
+      // Append the report-only header to the catch-all route
+      routes[routes.length - 1].headers.push({ key: 'Content-Security-Policy-Report-Only', value });
     }
 
-    return [{
-      source: '/(.*)',
-      headers: [{ key: 'Content-Security-Policy-Report-Only', value }],
-    }];
+    // For dev/enforce/off, do not add any CSP header here (middleware controls enforcement).
+    return routes;
   },
 };
 
