@@ -22,10 +22,16 @@ const nextConfig: NextConfig = {
     ];
 
     // Base routes that always receive the general security headers
+    // For stronger Spectre site isolation: set static assets & favicon as same-origin
+    const staticHeaders = [
+      ...securityHeaders,
+      { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
+    ];
+    // Root/pages/API continue to rely on middleware for CORP 'same-origin'.
     const routes: Array<{ source: string; headers: { key: string; value: string }[] }> = [
-      { source: '/_next/static/(.*)', headers: securityHeaders },
-      { source: '/favicon.ico', headers: securityHeaders },
-      { source: '/(.*)', headers: [...securityHeaders] },
+      { source: '/_next/static/(.*)', headers: staticHeaders },
+      { source: '/favicon.ico', headers: staticHeaders },
+      { source: '/(.*)', headers: [...securityHeaders, { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' }] },
     ];
 
     // Only emit CSP Report-Only here; enforced CSP is handled in middleware.
