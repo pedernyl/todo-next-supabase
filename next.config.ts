@@ -34,6 +34,16 @@ const nextConfig: NextConfig = {
       { source: '/(.*)', headers: [...securityHeaders, { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' }] },
     ];
 
+    // Optional COEP, gated via env to protect NextAuth GitHub and other third-party flows
+    // NEXT_COEP=require-corp | credentialless
+    const coep = (process.env.NEXT_COEP || '').toLowerCase();
+    if (coep === 'require-corp' || coep === 'credentialless') {
+      routes[routes.length - 1].headers.push({
+        key: 'Cross-Origin-Embedder-Policy',
+        value: coep,
+      });
+    }
+
     // Only emit CSP Report-Only here; enforced CSP is handled in middleware.
     if (mode === 'report-only') {
       // Dynamically include Supabase origins in connect-src for accurate reporting.

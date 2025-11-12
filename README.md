@@ -29,7 +29,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Environment variables
 
-See `.env.local.example` for a full list. Required for local dev:
+See `.env.example` (copy to `.env.local`) for a fully documented list. Required for local dev:
 
 - NEXT_PUBLIC_BASE_URL=http://localhost:3000
 - NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
@@ -39,6 +39,10 @@ See `.env.local.example` for a full list. Required for local dev:
 - Optional: NEXTAUTH_ALLOWED_USERS=comma,separated,emails
 
 In production you typically set `NEXTAUTH_URL` to your site origin.
+
+Additional (optional) hardening / isolation vars:
+- `NEXT_CSP_MODE` (off|dev|report-only|enforce) – controls CSP behavior (middleware enforces; report-only emitted by config).
+- `NEXT_COEP` (require-corp|credentialless) – enables Cross-Origin-Embedder-Policy for isolation; leave unset if unsure.
 
 ## Content Security Policy (CSP)
 

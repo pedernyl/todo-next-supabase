@@ -22,10 +22,10 @@ export default function AuthButtons() {
   return (
   <div className="flex justify-center max-w-xl mx-auto">
       <button
-        onClick={() => signIn()}
+        onClick={() => signIn('github', { callbackUrl: '/' })}
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
-        Sign in
+        Sign in with GitHub
       </button>
     </div>
   );
