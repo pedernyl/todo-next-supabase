@@ -29,7 +29,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Environment variables
 
-See `.env.local.example` for a full list. Required for local dev:
+See `.env.example` (copy to `.env.local`) for a fully documented list. Required for local dev:
 
 - NEXT_PUBLIC_BASE_URL=http://localhost:3000
 - NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
@@ -39,6 +39,10 @@ See `.env.local.example` for a full list. Required for local dev:
 - Optional: NEXTAUTH_ALLOWED_USERS=comma,separated,emails
 
 In production you typically set `NEXTAUTH_URL` to your site origin.
+
+Additional (optional) hardening / isolation vars:
+- `NEXT_CSP_MODE` (off|dev|report-only|enforce) – controls CSP behavior (middleware enforces; report-only emitted by config).
+- `NEXT_COEP` (require-corp|credentialless) – enables Cross-Origin-Embedder-Policy for isolation; leave unset if unsure.
 
 ## Content Security Policy (CSP)
 
@@ -61,6 +65,16 @@ NEXT_CSP_MODE=enforce
 ```
 
 The policy automatically whitelists your Supabase project URL (https) and its realtime websocket endpoint (wss) based on `NEXT_PUBLIC_SUPABASE_URL`.
+
+## Security headers
+
+- X-Powered-By is disabled at the framework level to avoid disclosing implementation details.
+	- Config: `poweredByHeader: false` in `next.config.ts`
+	- Middleware also deletes any stray `x-powered-by` header as defense-in-depth.
+- Verify locally:
+	```bash
+	curl -s -D - http://localhost:3000/ -o /dev/null | grep -i x-powered-by || echo 'No X-Powered-By header'
+	```
 
 ## Learn More
 
